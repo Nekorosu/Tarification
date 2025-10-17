@@ -5,6 +5,7 @@ import openpyxl
 def main():
     # поиск колонки с преподавателями
     teacher_column = search_teacher_coll_on_file()
+    print(teacher_column)
 
 
 def search_teacher_coll_on_file(
@@ -32,17 +33,19 @@ def search_teacher_coll_on_file(
                 # проверяем мастер ячейку на соответствие переменной, которую ищем
 
                 coordinate_of_merged_cells = [start_col, start_row]
-                return master_cell  # возвращаем координаты найденных ячеек
+                return (
+                    coordinate_of_merged_cells  # возвращаем координаты найденных ячеек
+                )
         else:
             master_cell = None
 
     except SyntaxError:
         if master_cell == None:
             print(
-                "Ошибка. Не найдена соответствующая ячейка, проверьте верность введеных в ячейку данных"
+                "Ошибка. Не найдена соответствующая ячейка, проверьте верность введеных в ячейку данных."
             )
         else:
-            print("Ошибка функции 'Поиск преподавателей в книге' ")
+            print("Ошибка функции 'Поиск преподавателей в книге'.")
 
 
 if __name__ == "__main__":
