@@ -43,7 +43,7 @@ def search_teacher_coll_on_file():
         else:
             master_cell = None
 
-    except SyntaxError:
+    except SyntaxError:  # обработка ошибок
         if master_cell == None:
             return "Ошибка. Не найдена соответствующая ячейка, проверьте верность введеных в ячейку данных."
 
@@ -53,10 +53,14 @@ def search_teacher_coll_on_file():
 
 def extract_teachers_from_column(coordinates_of_teachers_column):
 
-    df = pd.read_excel(file_path, header=None)
-    column_num = coordinates_of_teachers_column[0] - 1
-    row_num = coordinates_of_teachers_column[1] - 1
-    teachers = df.iloc[row_num + 1 :, column_num].dropna().tolist()
+    df = pd.read_excel(file_path, header=None)  # читат файл excel
+    column_num = (
+        coordinates_of_teachers_column[0] - 1
+    )  # получаем номер колонны с именами (-1 т.к. pandas - 0-based)
+    row_num = coordinates_of_teachers_column[1] - 1  # тоже самое с строкой
+    teachers = (
+        df.iloc[row_num + 1 :, column_num].dropna().tolist()
+    )  # перебор всех строк df в данной column_num, удаление NaN
     return teachers
 
 
