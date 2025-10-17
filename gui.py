@@ -2,21 +2,25 @@ import pandas as pd
 import openpyxl
 
 
+file_path = "/home/geguh/VSCode/Tarification/xlsx/Нагрузка ПД.xlsx"
+
+
 def main():
+
     # поиск колонки с преподавателями
-    teacher_column = search_teacher_coll_on_file()
-    print(teacher_column)
+    teacher_column_coordinates = search_teacher_coll_on_file()
+
+    print(extract_teachers_from_column(teacher_column_coordinates))
 
 
-def search_teacher_coll_on_file(
-    file_path="/home/geguh/VSCode/Tarification/xlsx/Нагрузка ПД.xlsx",
-):
+def search_teacher_coll_on_file():
 
     try:
         searched_cell = "преподаватель"
 
         wb = openpyxl.load_workbook(file_path)  # загружаем рабочую книгу excel
         ws = wb.active  # ставим рабочую страницу книги
+
         merged_cells = (
             ws.merged_cells.ranges
         )  # определяем все объединенные ячейки страницы
@@ -41,11 +45,19 @@ def search_teacher_coll_on_file(
 
     except SyntaxError:
         if master_cell == None:
-            print(
-                "Ошибка. Не найдена соответствующая ячейка, проверьте верность введеных в ячейку данных."
-            )
+            return "Ошибка. Не найдена соответствующая ячейка, проверьте верность введеных в ячейку данных."
+
         else:
-            print("Ошибка функции 'Поиск преподавателей в книге'.")
+            return "Ошибка функции 'Поиск преподавателей в книге'."
+
+
+def extract_teachers_from_column(coordinates_of_teachers_column):
+
+    df = pd.read_excel(file_path, header=None)
+    column_num = coordinates_of_teachers_column[0] - 1
+    row_num = coordinates_of_teachers_column[1] - 1
+    teachers = df.iloc[row_num + 1 :, column_num].dropna().tolist()
+    return teachers
 
 
 if __name__ == "__main__":
